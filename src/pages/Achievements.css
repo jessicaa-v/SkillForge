@@ -1,0 +1,151 @@
+.achievements-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.achievement-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.achievement-card:hover {
+  transform: translateY(-5px);
+}
+
+.badge-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.locked .badge-icon {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.locked {
+  border-color: var(--border-color);
+  background: var(--color-bg-base);
+}
+
+/* Rarity Styles */
+.rarity-common .badge-icon {
+  background: linear-gradient(135deg, #94A3B8, #64748B);
+  color: white;
+  box-shadow: 0 0 20px rgba(148, 163, 184, 0.2);
+}
+
+.rarity-rare .badge-icon {
+  background: linear-gradient(135deg, #38BDF8, #0284C7);
+  color: white;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+.rarity-epic .badge-icon {
+  background: linear-gradient(135deg, #A78BFA, #7C3AED);
+  color: white;
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+}
+
+.rarity-legendary .badge-icon {
+  background: linear-gradient(135deg, #FBBF24, #D97706);
+  color: white;
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+}
+
+.rarity-legendary {
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.rarity-legendary::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.achievement-info h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  min-height: 40px;
+}
+
+.achievement-meta {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rarity-tag {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.tag-common { background: rgba(148, 163, 184, 0.1); color: #94A3B8; }
+.tag-rare { background: rgba(56, 189, 248, 0.1); color: #38BDF8; }
+.tag-epic { background: rgba(167, 139, 250, 0.1); color: #A78BFA; }
+.tag-legendary { background: rgba(251, 191, 36, 0.1); color: #FBBF24; }
+
+.achievement-date {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}

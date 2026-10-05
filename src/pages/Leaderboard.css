@@ -1,0 +1,212 @@
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.leaderboard-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.podium-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  min-height: 250px;
+}
+
+.podium-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  position: relative;
+  width: 180px;
+  transition: transform 0.3s ease;
+}
+
+.podium-card:hover {
+  transform: translateY(-5px);
+}
+
+.gold {
+  background: linear-gradient(to top, rgba(251, 191, 36, 0.2), rgba(251, 191, 36, 0.05));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-bottom: none;
+  height: 220px;
+}
+
+.silver {
+  background: linear-gradient(to top, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.05));
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-bottom: none;
+  height: 180px;
+}
+
+.bronze {
+  background: linear-gradient(to top, rgba(217, 119, 6, 0.2), rgba(217, 119, 6, 0.05));
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-bottom: none;
+  height: 160px;
+}
+
+.podium-rank {
+  position: absolute;
+  top: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.gold .podium-rank { background: #FBBF24; color: #1F2937; }
+.silver .podium-rank { background: #94A3B8; color: #0F172A; }
+.bronze .podium-rank { background: #D97706; color: white; }
+
+.podium-crown {
+  position: absolute;
+  top: -45px;
+  font-size: 2rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.podium-avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--color-bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.gold .podium-avatar { border: 3px solid #FBBF24; }
+.silver .podium-avatar { border: 3px solid #94A3B8; }
+.bronze .podium-avatar { border: 3px solid #D97706; }
+
+.avatar-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.podium-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.podium-level {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.podium-xp {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.gold .podium-xp { color: #FBBF24; }
+
+.leaderboard-list {
+  padding: 0;
+  overflow: hidden;
+}
+
+.list-header {
+  display: flex;
+  padding: 1rem 1.5rem;
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.list-row {
+  display: flex;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.list-row:last-child {
+  border-bottom: none;
+}
+
+.list-row:hover {
+  background: var(--color-bg-hover);
+}
+
+.highlight-current {
+  background: rgba(99, 102, 241, 0.1);
+  border-left: 3px solid var(--color-primary);
+}
+
+.highlight-current:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.col-rank { width: 10%; }
+.col-user { width: 40%; }
+.col-dept { width: 20%; }
+.col-level { width: 15%; }
+.col-xp { width: 15%; text-align: right; }
+
+.row-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+.text-muted { color: var(--color-text-muted); }
+.text-gold { color: var(--color-accent-gold); }
+.ml-2 { margin-left: 0.5rem; }
+
+.leaderboard-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+}
