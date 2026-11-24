@@ -7,7 +7,9 @@ import Leaderboard from './pages/Leaderboard';
 import Achievements from './pages/Achievements';
 import Profile from './pages/Profile';
 import Challenges from './pages/Challenges';
+import Certificates from './pages/Certificates';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminFeedback from './pages/AdminFeedback';
 import CourseView from './pages/CourseView';
 import Login from './pages/Login';
 
@@ -38,6 +40,7 @@ const AppRoutes = () => {
         <Route path="learning" element={<MyLearning />} />
         <Route path="course/:courseId" element={<CourseView />} />
         <Route path="challenges" element={<Challenges />} />
+        <Route path="certificates" element={<Certificates />} />
         <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="achievements" element={<Achievements />} />
         <Route path="profile" element={<Profile />} />
@@ -46,6 +49,7 @@ const AppRoutes = () => {
       {/* HR Routes */}
       <Route path="/admin" element={<ProtectedRoute requireRole="hr"><Layout /></ProtectedRoute>}>
         <Route index element={<AdminDashboard />} />
+        <Route path="feedback" element={<AdminFeedback />} />
         <Route path="employees" element={<div className="p-6">Employees (WIP)</div>} />
       </Route>
       

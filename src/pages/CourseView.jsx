@@ -1,9 +1,25 @@
 import { useState } from 'react';
-import { Play, CheckCircle2, Lock, ChevronLeft, Sparkles, BookOpen, Clock, Crown, Flame } from 'lucide-react';
+import { 
+  Play, 
+  CheckCircle2, 
+  Lock, 
+  ChevronLeft, 
+  Sparkles, 
+  BookOpen, 
+  Clock, 
+  Crown, 
+  Flame,
+  Award,
+  MessageSquare
+} from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { ForgeMascot } from '../components/ForgeMascot';
 import { CategoryIllustration } from '../components/GameIcons';
+import CertificateModal from '../components/certificate/CertificateModal';
+import CourseFeedbackModal from '../components/feedback/CourseFeedbackModal';
+import { generateCertificateForCourse, getCertificateByCourseId } from '../utils/certificateStorage';
+import { getUserFeedbackForCourse } from '../utils/feedbackStorage';
 import './CourseView.css';
 
 const modulesList = [
@@ -21,8 +37,17 @@ const CourseView = () => {
   const [selectedModule, setSelectedModule] = useState(4);
   const [lessonCompleted, setLessonCompleted] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [activeCertificate, setActiveCertificate] = useState(null);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [, setFeedbackTrigger] = useState(0);
 
   const course = state.courses.find(c => c.id === courseId) || state.courses[0];
+  const userFeedback = getUserFeedbackForCourse(course.id, state.user?.id);
+
+  const handleOpenCertificate = () => {
+    const cert = getCertificateByCourseId(course.id) || generateCertificateForCourse(course, state.user);
+    setActiveCertificate(cert);
+  };
 
   const completeLesson = () => {
     setLessonCompleted(true);
@@ -30,8 +55,15 @@ const CourseView = () => {
     setTimeout(() => {
       addXP(100, 'Lesson Completed');
       dispatch({ type: 'COMPLETE_MODULE', payload: { courseId: course.id, moduleId: selectedModule } });
-    }, 400);
+      
+      // If this completes the course, generate certificate
+      if (course.completedModules + 1 >= course.totalModules) {
+        generateCertificateForCourse({ ...course, status: 'completed', progress: 100 }, state.user);
+      }
+    }, 500);
   };
+
+  const isCourseComplete = course.progress === 100 || course.status === 'completed';
 
   return (
     <div className="course-view-container animate-slide-up">
@@ -181,7 +213,7 @@ const CourseView = () => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: ACTIVE LESSON ARENA */}
+        {/* RIGHT COLUMN: ACTIVE LESSON ARENA & CREDENTIALS */}
         <div className="lesson-arena-column">
           <div className="card lesson-arena-card">
             <div className="lesson-arena-header">
@@ -260,7 +292,7 @@ const CourseView = () => {
               )}
             </div>
 
-            {/* Celebration Modal / Banner */}
+            {/* Celebration Toast */}
             {showCelebration && (
               <div className="celebration-toast animate-pop">
                 <ForgeMascot pose="celebrate" size={54} />
@@ -271,8 +303,59 @@ const CourseView = () => {
               </div>
             )}
           </div>
+
+          {/* Certificate & Feedback Panels (Teammate Features) */}
+          {isCourseComplete && (
+            <div className="card mt-6 p-4 flex justify-between items-center" style={{ background: '#FFFDF5', border: '2px solid #FDE68A' }}>
+              <div className="flex items-center gap-3">
+                <Award size={32} className="text-gold" />
+                <div>
+                  <h4 className="font-bold text-sm" style={{ color: '#B45309' }}>Official Certificate Available</h4>
+                  <p className="text-xs text-muted">You have completed all curriculum modules for this course.</p>
+                </div>
+              </div>
+              <button className="btn btn-gold text-sm" onClick={handleOpenCertificate}>
+                <Award size={16} /> View Certificate
+              </button>
+            </div>
+          )}
+
+          <div className="card mt-4 p-4 flex justify-between items-center" style={{ background: '#F8F6FE', border: '2px solid #DDD6FE' }}>
+            <div className="flex items-center gap-3">
+              <MessageSquare size={30} className="text-purple" />
+              <div>
+                <h4 className="font-bold text-sm text-purple">
+                  {userFeedback ? `Course Evaluated (★ ${userFeedback.rating}/5)` : 'Rate & Evaluate This Course'}
+                </h4>
+                <p className="text-xs text-muted">
+                  {userFeedback
+                    ? 'Your feedback has been saved and shared with HR. Click to review or update.'
+                    : 'Share a 1–5 star rating and quick feedback to help HR improve employee training.'}
+                </p>
+              </div>
+            </div>
+            <button className="btn btn-secondary text-sm" onClick={() => setShowFeedbackModal(true)}>
+              <MessageSquare size={16} /> {userFeedback ? 'View My Feedback' : 'Leave Feedback'}
+            </button>
+          </div>
         </div>
       </div>
+
+      {activeCertificate && (
+        <CertificateModal
+          certificate={activeCertificate}
+          onClose={() => setActiveCertificate(null)}
+        />
+      )}
+
+      {showFeedbackModal && (
+        <CourseFeedbackModal
+          course={course}
+          user={state.user}
+          onClose={() => setShowFeedbackModal(false)}
+          onSubmitted={() => setFeedbackTrigger((prev) => prev + 1)}
+        />
+      )}
     </div>
   );
 };

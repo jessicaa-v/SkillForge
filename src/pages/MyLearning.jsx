@@ -1,9 +1,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Play, CheckCircle2, Clock, Sparkles, Star, Compass, ArrowRight } from 'lucide-react';
+import { 
+  Search, 
+  Play, 
+  CheckCircle2, 
+  Clock, 
+  Sparkles, 
+  Star, 
+  Compass, 
+  ArrowRight,
+  Award
+} from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { CategoryIllustration } from '../components/GameIcons';
 import { ForgeMascot } from '../components/ForgeMascot';
+import CertificateModal from '../components/certificate/CertificateModal';
+import { getCertificateByCourseId, generateCertificateForCourse } from '../utils/certificateStorage';
 import './MyLearning.css';
 
 const categoriesList = [
@@ -21,6 +33,7 @@ const MyLearning = () => {
   const { state } = useAppContext();
   const [activeTab, setActiveTab] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeCertificate, setActiveCertificate] = useState(null);
 
   const coursesData = state.courses || [];
 
@@ -37,6 +50,11 @@ const MyLearning = () => {
   });
 
   const featuredCourse = coursesData.find(c => c.status === 'in-progress') || coursesData[0];
+
+  const handleViewCert = (course) => {
+    const cert = getCertificateByCourseId(course.id) || generateCertificateForCourse(course, state.user);
+    setActiveCertificate(cert);
+  };
 
   return (
     <div className="my-learning-container animate-slide-up">
@@ -151,7 +169,7 @@ const MyLearning = () => {
 
                 {isDone && (
                   <div className="course-done-seal" title="Course Completed!">
-                    <CheckCircle2 size={20} />
+                    <CheckCircle2 size={18} />
                     <span>DONE</span>
                   </div>
                 )}
@@ -185,9 +203,18 @@ const MyLearning = () => {
                 {/* Action button */}
                 <div className="course-card-action">
                   {isDone ? (
-                    <Link to={`/course/${course.id}`} className="btn btn-secondary w-full">
-                      Review Course Material
-                    </Link>
+                    <div className="flex gap-2 w-full">
+                      <Link to={`/course/${course.id}`} className="btn btn-secondary flex-1" style={{ display: 'flex', justifyContent: 'center' }}>
+                        Review
+                      </Link>
+                      <button 
+                        className="btn btn-gold flex-1" 
+                        onClick={() => handleViewCert(course)} 
+                        style={{ display: 'flex', justifyContent: 'center', gap: '0.35rem', fontSize: '0.85rem' }}
+                      >
+                        <Award size={15} /> Certificate
+                      </button>
+                    </div>
                   ) : isInProgress ? (
                     <Link to={`/course/${course.id}`} className="btn btn-primary w-full">
                       <Play size={16} fill="currentColor" /> Continue Learning
@@ -203,6 +230,13 @@ const MyLearning = () => {
           );
         })}
       </div>
+
+      {activeCertificate && (
+        <CertificateModal
+          certificate={activeCertificate}
+          onClose={() => setActiveCertificate(null)}
+        />
+      )}
     </div>
   );
 };

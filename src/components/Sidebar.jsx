@@ -1,19 +1,21 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  BookOpen, 
-  Target, 
-  Trophy, 
-  Medal, 
-  User, 
-  BarChart3, 
-  Users, 
-  LogOut, 
-  FolderOpen, 
+import {
+  LayoutDashboard,
+  BookOpen,
+  Target,
+  Trophy,
+  Medal,
+  User,
+  BarChart3,
+  Users,
+  LogOut,
+  FolderOpen,
   PieChart,
   Sparkles,
   Flame,
-  Coins
+  Coins,
+  FileBadge,
+  MessageSquare
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { ForgeMascot } from './ForgeMascot';
@@ -38,7 +40,8 @@ const Sidebar = ({ isOpen = false, onClose }) => {
   const learnerLinks = [
     { to: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
     { to: '/learning', icon: <BookOpen size={20} />, label: 'My Learning' },
-    { to: '/challenges', icon: <Target size={20} />, label: 'Quests & Board' },
+    { to: '/challenges', icon: <Target size={20} />, label: 'Quests & Quizzes' },
+    { to: '/certificates', icon: <FileBadge size={20} />, label: 'Certificates' },
     { to: '/leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' },
     { to: '/achievements', icon: <Medal size={20} />, label: 'Achievements' },
     { to: '/profile', icon: <User size={20} />, label: 'Profile & Skills' },
@@ -51,6 +54,7 @@ const Sidebar = ({ isOpen = false, onClose }) => {
 
   const adminLinksLearning = [
     { to: '/admin/courses', icon: <FolderOpen size={20} />, label: 'Courses' },
+    { to: '/admin/feedback', icon: <MessageSquare size={20} />, label: 'Course Feedback' },
     { to: '/admin/challenges', icon: <Target size={20} />, label: 'Challenges' },
   ];
 
@@ -86,16 +90,16 @@ const Sidebar = ({ isOpen = false, onClose }) => {
           </button>
         )}
       </div>
-      
+
       {/* Navigation Links */}
       <div className="sidebar-nav">
         {!isHr && (
           <div className="nav-section">
             <p className="nav-label">LEARNING QUESTS</p>
             {learnerLinks.map(link => (
-              <NavLink 
-                key={link.to} 
-                to={link.to} 
+              <NavLink
+                key={link.to}
+                to={link.to}
                 onClick={handleLinkClick}
                 className={({ isActive }) => `nav-link ${isActive && link.to === '/' ? window.location.pathname === '/' ? 'active' : '' : isActive ? 'active' : ''}`}
                 end={link.to === '/'}
@@ -114,9 +118,9 @@ const Sidebar = ({ isOpen = false, onClose }) => {
             <div className="nav-section">
               <p className="nav-label">HR OVERVIEW</p>
               {adminLinksOverview.map(link => (
-                <NavLink 
-                  key={link.to} 
-                  to={link.to} 
+                <NavLink
+                  key={link.to}
+                  to={link.to}
                   onClick={handleLinkClick}
                   className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                   end={link.to === '/admin'}
@@ -129,9 +133,9 @@ const Sidebar = ({ isOpen = false, onClose }) => {
             <div className="nav-section">
               <p className="nav-label">CURRICULUM</p>
               {adminLinksLearning.map(link => (
-                <NavLink 
-                  key={link.to} 
-                  to={link.to} 
+                <NavLink
+                  key={link.to}
+                  to={link.to}
                   onClick={handleLinkClick}
                   className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 >
@@ -143,9 +147,9 @@ const Sidebar = ({ isOpen = false, onClose }) => {
             <div className="nav-section">
               <p className="nav-label">TEAM DIRECTORY</p>
               {adminLinksPeople.map(link => (
-                <NavLink 
-                  key={link.to} 
-                  to={link.to} 
+                <NavLink
+                  key={link.to}
+                  to={link.to}
                   onClick={handleLinkClick}
                   className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 >
@@ -157,7 +161,7 @@ const Sidebar = ({ isOpen = false, onClose }) => {
           </>
         )}
       </div>
-      
+
       {/* Sidebar Footer Gamification Widget */}
       <div className="sidebar-footer">
         {!isHr && state.user && (

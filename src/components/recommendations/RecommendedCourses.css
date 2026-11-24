@@ -1,0 +1,223 @@
+/* ==========================================================================
+   SkillForge Recommended For You Section Styles
+   Theme: Dark Navy, Indigo, Purple, Cyan & Gold
+   ========================================================================== */
+
+.recommendations-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.recommendations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.recommendations-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.recommendations-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.recommendations-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+/* Entire card is clickable */
+.recommendation-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.1rem;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.4), 0 0 15px rgba(99, 102, 241, 0.2);
+}
+
+.recommendation-card:hover .rec-action-arrow {
+  transform: translateX(4px);
+  color: var(--color-primary);
+}
+
+.recommendation-top-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendation-bottom-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Reason banner at top of each card */
+.recommendation-reason-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.recommendation-reason-box.skill {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--color-accent-gold);
+}
+
+.recommendation-reason-box.quiz {
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  color: var(--color-accent-cyan);
+}
+
+.recommendation-reason-box.completed_course {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--color-accent-green);
+}
+
+.recommendation-reason-box.general {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: var(--color-primary);
+}
+
+.recommendation-reason-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.recommendation-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.recommendation-category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.recommendation-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.35;
+}
+
+/* Metadata Row: Difficulty, Time, XP */
+.recommendation-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+.meta-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.rec-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+}
+
+.rec-meta-item.difficulty-badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rec-meta-item.difficulty-badge.beginner {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--color-accent-green);
+}
+
+.rec-meta-item.difficulty-badge.intermediate {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--color-primary);
+}
+
+.rec-meta-item.difficulty-badge.advanced {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--color-accent-gold);
+}
+
+.rec-meta-item.xp {
+  color: var(--color-accent-gold);
+  font-weight: 700;
+}
+
+/* Action Prompt row */
+.recommendation-click-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  padding-top: 0.25rem;
+}
+
+.rec-action-arrow {
+  transition: transform 0.2s ease, color 0.2s ease;
+}

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { 
   Users, 
   BookOpen, 
@@ -8,7 +9,9 @@ import {
   FileSpreadsheet, 
   Plus, 
   Sparkles,
-  Clock
+  Clock,
+  MessageSquare,
+  Star
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -21,6 +24,7 @@ import {
   LineChart, 
   Line 
 } from 'recharts';
+import { getAllFeedback } from '../utils/feedbackStorage';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -49,6 +53,8 @@ const AdminDashboard = () => {
     { name: 'Alex Thorne', role: 'Product Designer', dept: 'Product', level: 12, xp: '8,420', status: 'Compliant' },
     { name: 'Marcus Chen', role: 'Account Exec', dept: 'Sales', level: 12, xp: '8,740', status: 'Action Needed' },
   ];
+
+  const recentFeedback = getAllFeedback().slice(0, 3);
 
   return (
     <div className="admin-portal animate-slide-up">
@@ -308,6 +314,51 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* RECENT COURSE EVALUATIONS SECTION (Teammate Feature) */}
+      <div className="card mt-6">
+        <div className="section-header">
+          <div>
+            <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <MessageSquare size={20} color="var(--color-primary)" />
+              Recent Course Evaluations & Feedback
+            </h2>
+            <p className="chart-sub">Direct learner feedback and ratings across courses</p>
+          </div>
+          <Link to="/admin/feedback" className="btn-text">
+            View All Feedback <ArrowUpRight size={16} />
+          </Link>
+        </div>
+        <div className="activity-list" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '1rem' }}>
+          {recentFeedback.map((f) => (
+            <div 
+              key={f.id} 
+              className="activity-item" 
+              style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#FFFDF9', border: '1.5px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}
+            >
+              <div 
+                className="activity-avatar" 
+                style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}
+              >
+                {f.userName.split(' ').map(n => n[0]).join('')}
+              </div>
+              <div className="activity-content flex-1">
+                <div className="flex justify-between items-center">
+                  <p>
+                    <strong>{f.userName}</strong> rated <strong>{f.courseTitle}</strong>
+                  </p>
+                  <div className="flex items-center gap-1 text-gold font-bold" style={{ color: '#B45309' }}>
+                    <Star size={14} fill="#FFC857" color="#FFC857" /> {f.rating}.0
+                  </div>
+                </div>
+                <p className="text-sm mt-1" style={{ color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
+                  "{f.comments}"
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

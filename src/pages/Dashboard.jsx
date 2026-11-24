@@ -17,6 +17,7 @@ import {
 import { useAppContext } from '../context/AppContext';
 import { ForgeMascot } from '../components/ForgeMascot';
 import { CategoryIllustration, CollectibleBadge } from '../components/GameIcons';
+import RecommendedCourses from '../components/recommendations/RecommendedCourses';
 import './Dashboard.css';
 
 const weekDays = [
@@ -189,7 +190,7 @@ const Dashboard = () => {
 
       {/* 3. MAIN DASHBOARD CONTENT (Two Column Layout) */}
       <div className="dashboard-main-grid">
-        {/* Left Column: Learning Journey & Skills */}
+        {/* Left Column: Learning Journey, Recommendations & Skills */}
         <div className="dashboard-col-primary">
           {/* PROMINENT LEARNING JOURNEY CONTINUE CARD */}
           <section className="card journey-hero-card">
@@ -276,6 +277,11 @@ const Dashboard = () => {
               </div>
             </div>
           </section>
+
+          {/* RECOMMENDED COURSES SECTION (Teammate Feature) */}
+          <div className="mt-6">
+            <RecommendedCourses courses={state.courses} user={currentUser} />
+          </div>
 
           {/* SKILL PROGRESSION SECTION */}
           <section className="card skills-progression-card mt-6">
