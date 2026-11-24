@@ -1,11 +1,20 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Play, CheckCircle, Clock } from 'lucide-react';
+import { Search, Filter, CheckCircle, Clock, Award } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import CertificateModal from '../components/certificate/CertificateModal';
+import { getCertificateByCourseId, generateCertificateForCourse } from '../utils/certificateStorage';
 import './MyLearning.css';
 
 const MyLearning = () => {
   const { state } = useAppContext();
+  const [activeCertificate, setActiveCertificate] = useState(null);
   const coursesData = state.courses;
+
+  const handleViewCert = (course) => {
+    const cert = getCertificateByCourseId(course.id) || generateCertificateForCourse(course, state.user);
+    setActiveCertificate(cert);
+  };
 
   return (
     <div className="my-learning animate-slide-up">
@@ -71,13 +80,25 @@ const MyLearning = () => {
                 ) : course.status === 'in-progress' ? (
                   <Link to={`/course/${course.id}`} className="btn btn-secondary w-full" style={{display: 'flex'}}>Continue Learning</Link>
                 ) : (
-                  <Link to={`/course/${course.id}`} className="btn btn-secondary w-full" style={{display: 'flex'}}>Review Course</Link>
+                  <div className="flex gap-2 w-full">
+                    <Link to={`/course/${course.id}`} className="btn btn-secondary flex-1" style={{display: 'flex', justifyContent: 'center'}}>Review</Link>
+                    <button className="btn btn-primary flex-1" onClick={() => handleViewCert(course)} style={{display: 'flex', justifyContent: 'center', gap: '0.35rem', fontSize: '0.85rem'}}>
+                      <Award size={15} /> Certificate
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {activeCertificate && (
+        <CertificateModal
+          certificate={activeCertificate}
+          onClose={() => setActiveCertificate(null)}
+        />
+      )}
     </div>
   );
 };

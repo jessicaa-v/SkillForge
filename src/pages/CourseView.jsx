@@ -1,7 +1,11 @@
 import { useState } from 'react';
-import { Play, CheckCircle2, Lock, Star, ChevronLeft } from 'lucide-react';
+import { Play, CheckCircle2, Lock, Star, ChevronLeft, Award, MessageSquare } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import CertificateModal from '../components/certificate/CertificateModal';
+import CourseFeedbackModal from '../components/feedback/CourseFeedbackModal';
+import { generateCertificateForCourse, getCertificateByCourseId } from '../utils/certificateStorage';
+import { getUserFeedbackForCourse } from '../utils/feedbackStorage';
 import './CourseView.css';
 
 const CourseView = () => {
@@ -9,8 +13,17 @@ const CourseView = () => {
   const { state, addXP, dispatch } = useAppContext();
   const [xpEarned, setXpEarned] = useState(false);
   const [lessonCompleted, setLessonCompleted] = useState(false);
+  const [activeCertificate, setActiveCertificate] = useState(null);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [, setFeedbackTrigger] = useState(0);
 
   const course = state.courses.find(c => c.id === courseId) || state.courses[0];
+  const userFeedback = getUserFeedbackForCourse(course.id, state.user?.id);
+
+  const handleOpenCertificate = () => {
+    const cert = getCertificateByCourseId(course.id) || generateCertificateForCourse(course, state.user);
+    setActiveCertificate(cert);
+  };
 
   const completeLesson = () => {
     setLessonCompleted(true);
@@ -18,6 +31,11 @@ const CourseView = () => {
       setXpEarned(true);
       addXP(100, 'Lesson Completed');
       dispatch({ type: 'COMPLETE_MODULE', payload: { courseId: course.id, moduleId: 5 } });
+      
+      // If this completes the course, generate certificate
+      if (course.completedModules + 1 >= course.totalModules) {
+        generateCertificateForCourse({ ...course, status: 'completed', progress: 100 }, state.user);
+      }
     }, 500);
   };
 
@@ -166,9 +184,61 @@ const CourseView = () => {
                 </div>
               </div>
             )}
+
+            {(course.status === 'completed' || course.progress === 100) && (
+              <>
+                <div className="card mt-6 p-4 flex justify-between items-center" style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                  <div className="flex items-center gap-3">
+                    <Award size={28} className="text-gold" />
+                    <div>
+                      <h4 className="font-bold text-sm text-primary" style={{ color: 'var(--color-accent-gold)' }}>Official Certificate Available</h4>
+                      <p className="text-xs text-muted">You have completed all curriculum modules for this course.</p>
+                    </div>
+                  </div>
+                  <button className="btn btn-gold text-sm" onClick={handleOpenCertificate}>
+                    <Award size={15} /> View Certificate
+                  </button>
+                </div>
+
+                <div className="card mt-4 p-4 flex justify-between items-center" style={{ background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+                  <div className="flex items-center gap-3">
+                    <MessageSquare size={28} className="text-primary" />
+                    <div>
+                      <h4 className="font-bold text-sm text-primary">
+                        {userFeedback ? `Course Evaluated (★ ${userFeedback.rating}/5)` : 'Rate & Evaluate This Course'}
+                      </h4>
+                      <p className="text-xs text-muted">
+                        {userFeedback 
+                          ? 'Your feedback has been saved and shared with HR. Click to review or update.' 
+                          : 'Share a 1–5 star rating and quick feedback to help HR improve employee training.'}
+                      </p>
+                    </div>
+                  </div>
+                  <button className="btn btn-secondary text-sm" onClick={() => setShowFeedbackModal(true)}>
+                    <MessageSquare size={15} /> {userFeedback ? 'View My Feedback' : 'Leave Feedback'}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
+
+      {activeCertificate && (
+        <CertificateModal
+          certificate={activeCertificate}
+          onClose={() => setActiveCertificate(null)}
+        />
+      )}
+
+      {showFeedbackModal && (
+        <CourseFeedbackModal
+          course={course}
+          user={state.user}
+          onClose={() => setShowFeedbackModal(false)}
+          onSubmitted={() => setFeedbackTrigger((prev) => prev + 1)}
+        />
+      )}
     </div>
   );
 };

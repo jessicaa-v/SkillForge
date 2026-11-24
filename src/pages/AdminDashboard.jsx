@@ -1,4 +1,6 @@
-import { Users, BookOpen, Trophy, Target, TrendingUp, TrendingDown, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Users, BookOpen, Trophy, Target, TrendingUp, TrendingDown, ArrowUpRight, MessageSquare, Star } from 'lucide-react';
+import { getAllFeedback } from '../utils/feedbackStorage';
 import './AdminDashboard.css';
 import { 
   BarChart, 
@@ -38,6 +40,9 @@ const AdminDashboard = () => {
           <p className="page-subtitle">Platform overview and employee learning analytics.</p>
         </div>
         <div className="header-actions">
+          <Link to="/admin/feedback" className="btn btn-secondary">
+            <MessageSquare size={16} /> Course Evaluations
+          </Link>
           <button className="btn btn-secondary">Download Report</button>
           <button className="btn btn-primary">Create Course</button>
         </div>
@@ -166,6 +171,35 @@ const AdminDashboard = () => {
               <span className="activity-time">1 hour ago</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="card mt-6">
+        <div className="section-header">
+          <h2>Recent Course Evaluations</h2>
+          <Link to="/admin/feedback" className="btn-text">
+            View All Feedback <ArrowUpRight size={16} />
+          </Link>
+        </div>
+        <div className="activity-list">
+          {getAllFeedback().slice(0, 3).map((f) => (
+            <div key={f.id} className="activity-item">
+              <div className="activity-avatar bg-purple-avatar">
+                {f.userName.split(' ').map(n => n[0]).join('')}
+              </div>
+              <div className="activity-content flex-1">
+                <div className="flex justify-between items-center">
+                  <p>
+                    <strong>{f.userName}</strong> rated <strong>{f.courseTitle}</strong>
+                  </p>
+                  <div className="flex items-center gap-1 text-gold text-sm font-bold">
+                    <Star size={14} fill="currentColor" /> {f.rating}.0
+                  </div>
+                </div>
+                <p className="text-sm text-secondary mt-1">"{f.comments}"</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

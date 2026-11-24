@@ -13,7 +13,8 @@ import {
   Users,
   LogOut,
   FolderOpen,
-  PieChart
+  PieChart,
+  MessageSquare
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import './Sidebar.css';
@@ -33,6 +34,7 @@ const Sidebar = () => {
     { to: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
     { to: '/learning', icon: <BookOpen size={20} />, label: 'My Learning' },
     { to: '/challenges', icon: <Target size={20} />, label: 'Challenges' },
+    { to: '/certificates', icon: <FileBadge size={20} />, label: 'My Certificates' },
     { to: '/leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' },
     { to: '/achievements', icon: <Medal size={20} />, label: 'Achievements' },
     { to: '/profile', icon: <User size={20} />, label: 'Profile' },
@@ -45,6 +47,7 @@ const Sidebar = () => {
 
   const adminLinksLearning = [
     { to: '/admin/courses', icon: <FolderOpen size={20} />, label: 'Courses' },
+    { to: '/admin/feedback', icon: <MessageSquare size={20} />, label: 'Course Feedback' },
     { to: '/admin/challenges', icon: <Target size={20} />, label: 'Challenges' },
   ];
 

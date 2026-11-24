@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Flame, Star, Target, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import RecommendedCourses from '../components/recommendations/RecommendedCourses';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -101,6 +102,9 @@ const Dashboard = () => {
               </div>
             </div>
           </section>
+
+          {/* Recommended For You Section */}
+          <RecommendedCourses courses={state.courses} user={currentUser} />
 
           <section className="dashboard-section card mt-6">
             <div className="section-header">

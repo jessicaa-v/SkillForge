@@ -108,6 +108,12 @@ function reducer(state, action) {
       );
       return { ...state, achievements: updatedAchievements };
     }
+    case 'COMPLETE_QUEST': {
+      const updatedQuests = state.quests.map(q => 
+        q.id === action.payload ? { ...q, completed: true, progress: q.total || 1 } : q
+      );
+      return { ...state, quests: updatedQuests };
+    }
     case 'READ_NOTIFICATIONS':
       return { ...state, notifications: state.notifications.map(n => ({ ...n, read: true })) };
     case 'RESTORE_STATE':
