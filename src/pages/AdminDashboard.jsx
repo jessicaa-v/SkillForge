@@ -1,5 +1,15 @@
-import { Users, BookOpen, Trophy, Target, TrendingUp, TrendingDown, ArrowUpRight } from 'lucide-react';
-import './AdminDashboard.css';
+import { 
+  Users, 
+  BookOpen, 
+  Trophy, 
+  Target, 
+  TrendingUp, 
+  ArrowUpRight, 
+  FileSpreadsheet, 
+  Plus, 
+  Sparkles,
+  Clock
+} from 'lucide-react';
 import { 
   BarChart, 
   Bar, 
@@ -7,163 +17,295 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  LineChart,
-  Line
+  ResponsiveContainer, 
+  LineChart, 
+  Line 
 } from 'recharts';
+import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const engagementData = [
-    { name: 'Mon', value: 400 },
-    { name: 'Tue', value: 300 },
-    { name: 'Wed', value: 550 },
-    { name: 'Thu', value: 450 },
-    { name: 'Fri', value: 600 },
-    { name: 'Sat', value: 200 },
-    { name: 'Sun', value: 150 },
+    { name: 'Mon', value: 420 },
+    { name: 'Tue', value: 380 },
+    { name: 'Wed', value: 590 },
+    { name: 'Thu', value: 480 },
+    { name: 'Fri', value: 650 },
+    { name: 'Sat', value: 240 },
+    { name: 'Sun', value: 190 },
   ];
 
   const completionData = [
     { name: 'Engineering', completed: 85, pending: 15 },
-    { name: 'Sales', completed: 60, pending: 40 },
+    { name: 'Product', completed: 78, pending: 22 },
     { name: 'HR', completed: 95, pending: 5 },
-    { name: 'Marketing', completed: 70, pending: 30 },
+    { name: 'Marketing', completed: 72, pending: 28 },
+    { name: 'Sales', completed: 62, pending: 38 },
+  ];
+
+  const recentEmployees = [
+    { name: 'Sarah Jenkins', role: 'Staff Engineer', dept: 'Engineering', level: 18, xp: '12,450', status: 'Compliant' },
+    { name: 'Arjun Patel', role: 'Product Lead', dept: 'Product', level: 16, xp: '11,820', status: 'Compliant' },
+    { name: 'Priya Sharma', role: 'Marketing Mgr', dept: 'Marketing', level: 15, xp: '10,950', status: 'In Review' },
+    { name: 'Alex Thorne', role: 'Product Designer', dept: 'Product', level: 12, xp: '8,420', status: 'Compliant' },
+    { name: 'Marcus Chen', role: 'Account Exec', dept: 'Sales', level: 12, xp: '8,740', status: 'Action Needed' },
   ];
 
   return (
-    <div className="admin-dashboard animate-slide-up">
-      <div className="page-header">
+    <div className="admin-portal animate-slide-up">
+      {/* Header */}
+      <div className="admin-header-row">
         <div>
-          <h1>HR & Admin Dashboard</h1>
-          <p className="page-subtitle">Platform overview and employee learning analytics.</p>
+          <div className="header-pill">
+            <Trophy size={14} className="text-purple" /> WORKFORCE ANALYTICS & HR INTELLIGENCE
+          </div>
+          <h1 className="admin-main-title">HR Management Portal</h1>
+          <p className="admin-sub">Monitor organization-wide curriculum health, gamified training velocity, and compliance.</p>
         </div>
-        <div className="header-actions">
-          <button className="btn btn-secondary">Download Report</button>
-          <button className="btn btn-primary">Create Course</button>
+
+        <div className="admin-header-actions">
+          <button className="btn btn-secondary">
+            <FileSpreadsheet size={16} /> Export CSV
+          </button>
+          <button className="btn btn-primary">
+            <Plus size={16} /> Create Course
+          </button>
         </div>
       </div>
 
-      <div className="admin-stats-grid">
-        <div className="admin-stat-card card">
-          <div className="admin-stat-header">
-            <div className="admin-stat-icon bg-blue-light">
-              <Users size={24} className="text-blue" />
+      {/* 4 STATS CARDS */}
+      <div className="admin-kpi-grid">
+        <div className="kpi-card card card-hover">
+          <div className="kpi-card-header">
+            <div className="kpi-icon-pod bg-blue-soft">
+              <Users size={22} className="text-blue" />
             </div>
-            <span className="trend-badge positive"><TrendingUp size={14} /> +12%</span>
+            <span className="trend-chip positive"><TrendingUp size={13} /> +12% this mo.</span>
           </div>
-          <div className="admin-stat-info">
-            <h3>Total Learners</h3>
-            <span className="stat-value">1,248</span>
+          <div className="kpi-card-content">
+            <h3 className="kpi-value">1,248</h3>
+            <span className="kpi-label">Active Learners Enrolled</span>
+          </div>
+          <div className="kpi-footer-metric">
+            <span>98.2% monthly active rate</span>
           </div>
         </div>
 
-        <div className="admin-stat-card card">
-          <div className="admin-stat-header">
-            <div className="admin-stat-icon bg-purple-light">
-              <BookOpen size={24} className="text-purple" />
+        <div className="kpi-card card card-hover">
+          <div className="kpi-card-header">
+            <div className="kpi-icon-pod bg-purple-soft">
+              <BookOpen size={22} className="text-purple" />
             </div>
-            <span className="trend-badge positive"><TrendingUp size={14} /> +5%</span>
+            <span className="trend-chip positive"><TrendingUp size={13} /> +5% completion</span>
           </div>
-          <div className="admin-stat-info">
-            <h3>Course Completion</h3>
-            <span className="stat-value">68%</span>
+          <div className="kpi-card-content">
+            <h3 className="kpi-value">68.4%</h3>
+            <span className="kpi-label">Avg. Course Completion</span>
+          </div>
+          <div className="kpi-footer-metric">
+            <span>+4.2% vs previous quarter</span>
           </div>
         </div>
 
-        <div className="admin-stat-card card">
-          <div className="admin-stat-header">
-            <div className="admin-stat-icon bg-gold-light">
-              <Trophy size={24} className="text-gold" />
+        <div className="kpi-card card card-hover">
+          <div className="kpi-card-header">
+            <div className="kpi-icon-pod bg-gold-soft">
+              <Sparkles size={22} className="text-gold" />
             </div>
-            <span className="trend-badge positive"><TrendingUp size={14} /> +24%</span>
+            <span className="trend-chip positive"><TrendingUp size={13} /> +24% activity</span>
           </div>
-          <div className="admin-stat-info">
-            <h3>Total XP Earned</h3>
-            <span className="stat-value">2.4M</span>
+          <div className="kpi-card-content">
+            <h3 className="kpi-value text-gold">2.48M</h3>
+            <span className="kpi-label">Total Employee XP Earned</span>
+          </div>
+          <div className="kpi-footer-metric">
+            <span>1,420 daily quest completions</span>
           </div>
         </div>
 
-        <div className="admin-stat-card card">
-          <div className="admin-stat-header">
-            <div className="admin-stat-icon bg-red-light">
-              <Target size={24} className="text-red" />
+        <div className="kpi-card card card-hover">
+          <div className="kpi-card-header">
+            <div className="kpi-icon-pod bg-mint-soft">
+              <Target size={22} className="text-mint" />
             </div>
-            <span className="trend-badge negative"><TrendingDown size={14} /> -2%</span>
+            <span className="trend-chip positive"><TrendingUp size={13} /> 94% pass rate</span>
           </div>
-          <div className="admin-stat-info">
-            <h3>Avg. Quiz Score</h3>
-            <span className="stat-value">82%</span>
+          <div className="kpi-card-content">
+            <h3 className="kpi-value text-mint">84.2%</h3>
+            <span className="kpi-label">Avg. Assessment Score</span>
+          </div>
+          <div className="kpi-footer-metric">
+            <span>Security Compliance 96%</span>
           </div>
         </div>
       </div>
 
-      <div className="charts-grid">
-        <div className="chart-card card">
+      {/* CHARTS GRID */}
+      <div className="admin-charts-grid">
+        {/* Weekly Engagement Line Chart */}
+        <div className="chart-wrapper-card card">
           <div className="section-header">
-            <h2>Weekly Engagement</h2>
-            <button className="btn-text">View Details <ArrowUpRight size={16} /></button>
+            <div>
+              <h2>Weekly Engagement Trends</h2>
+              <p className="chart-sub">Daily learning hours completed across all teams</p>
+            </div>
+            <span className="tag tag-purple">Real-time</span>
           </div>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height="100%">
+
+          <div className="chart-canvas-box">
+            <ResponsiveContainer width="100%" height={260}>
               <LineChart data={engagementData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2E3A59" vertical={false} />
-                <XAxis dataKey="name" stroke="#94A3B8" />
-                <YAxis stroke="#94A3B8" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#F0E5D8" vertical={false} />
+                <XAxis dataKey="name" stroke="#6B6183" tick={{ fontSize: 12, fontWeight: 700 }} />
+                <YAxis stroke="#6B6183" tick={{ fontSize: 12, fontWeight: 700 }} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#1A2235', borderColor: '#2E3A59', borderRadius: '8px' }}
-                  itemStyle={{ color: '#F8FAFC' }}
+                  contentStyle={{ 
+                    backgroundColor: '#FFFFFF', 
+                    borderColor: '#EFE4D6', 
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 24px rgba(44, 33, 66, 0.1)',
+                    fontFamily: 'var(--font-sans)',
+                    fontWeight: 700
+                  }}
+                  itemStyle={{ color: '#7656E8' }}
                 />
-                <Line type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={3} dot={{ r: 4, fill: '#6366F1' }} activeDot={{ r: 6 }} />
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#7656E8" 
+                  strokeWidth={4} 
+                  dot={{ r: 5, fill: '#7656E8', stroke: '#FFFFFF', strokeWidth: 2 }} 
+                  activeDot={{ r: 8, fill: '#FFC857' }} 
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="chart-card card">
+        {/* Compliance by Department Bar Chart */}
+        <div className="chart-wrapper-card card">
           <div className="section-header">
-            <h2>Compliance by Department</h2>
+            <div>
+              <h2>Department Compliance & Completion</h2>
+              <p className="chart-sub">Completed vs pending mandatory training</p>
+            </div>
+            <div className="chart-legend-row">
+              <span className="dot-leg done"></span> Completed
+              <span className="dot-leg pending"></span> Pending
+            </div>
           </div>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height="100%">
+
+          <div className="chart-canvas-box">
+            <ResponsiveContainer width="100%" height={260}>
               <BarChart data={completionData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2E3A59" vertical={false} />
-                <XAxis dataKey="name" stroke="#94A3B8" />
-                <YAxis stroke="#94A3B8" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#F0E5D8" vertical={false} />
+                <XAxis dataKey="name" stroke="#6B6183" tick={{ fontSize: 11, fontWeight: 700 }} />
+                <YAxis stroke="#6B6183" tick={{ fontSize: 12, fontWeight: 700 }} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#1A2235', borderColor: '#2E3A59', borderRadius: '8px' }}
+                  contentStyle={{ 
+                    backgroundColor: '#FFFFFF', 
+                    borderColor: '#EFE4D6', 
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 24px rgba(44, 33, 66, 0.1)',
+                    fontFamily: 'var(--font-sans)'
+                  }} 
                 />
-                <Bar dataKey="completed" stackId="a" fill="#10B981" radius={[0, 0, 4, 4]} />
-                <Bar dataKey="pending" stackId="a" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="completed" stackId="a" fill="#50C9A7" radius={[0, 0, 4, 4]} />
+                <Bar dataKey="pending" stackId="a" fill="#63B8F5" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      <div className="card mt-6">
-        <div className="section-header">
-          <h2>Recent Gamification Activity</h2>
+      {/* LOWER SECTION: EMPLOYEE DIRECTORY PREVIEW & ACTIVITY STREAM */}
+      <div className="admin-bottom-grid">
+        {/* EMPLOYEE OVERVIEW TABLE */}
+        <div className="card admin-table-card">
+          <div className="section-header">
+            <div>
+              <h2>Learner Roster & Status</h2>
+              <p className="chart-sub">Recent employee progress and compliance validation</p>
+            </div>
+            <button className="btn-text">View All Directory <ArrowUpRight size={16} /></button>
+          </div>
+
+          <div className="admin-roster-table">
+            <div className="roster-thead">
+              <div className="r-cell r-name">Employee</div>
+              <div className="r-cell r-dept">Department</div>
+              <div className="r-cell r-lvl">Level</div>
+              <div className="r-cell r-xp">XP Earned</div>
+              <div className="r-cell r-status">Compliance</div>
+            </div>
+
+            <div className="roster-tbody">
+              {recentEmployees.map((emp, i) => (
+                <div key={i} className="roster-row">
+                  <div className="r-cell r-name">
+                    <div className="emp-avatar-circle">{emp.name.split(' ').map(n=>n[0]).join('')}</div>
+                    <div>
+                      <span className="emp-name-text">{emp.name}</span>
+                      <span className="emp-role-sub">{emp.role}</span>
+                    </div>
+                  </div>
+                  <div className="r-cell r-dept">
+                    <span className="emp-dept-badge">{emp.dept}</span>
+                  </div>
+                  <div className="r-cell r-lvl">
+                    <span className="emp-lvl-pill">Lvl {emp.level}</span>
+                  </div>
+                  <div className="r-cell r-xp">
+                    <span className="emp-xp-number">{emp.xp} XP</span>
+                  </div>
+                  <div className="r-cell r-status">
+                    <span className={`status-pill pill-${emp.status.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {emp.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="activity-list">
-          <div className="activity-item">
-            <div className="activity-avatar">SJ</div>
-            <div className="activity-content">
-              <p><strong>Sarah Jenkins</strong> reached <strong>Level 18</strong></p>
-              <span className="activity-time">2 minutes ago</span>
-            </div>
+
+        {/* ACTIVITY STREAM */}
+        <div className="card admin-activity-card">
+          <div className="section-header">
+            <h2>Live Gamification Stream</h2>
+            <span className="pulse-dot"></span>
           </div>
-          <div className="activity-item">
-            <div className="activity-avatar bg-purple-avatar">AP</div>
-            <div className="activity-content">
-              <p><strong>Arjun Patel</strong> unlocked the <strong>Course Crusher</strong> badge</p>
-              <span className="activity-time">15 minutes ago</span>
+
+          <div className="stream-list">
+            <div className="stream-item">
+              <div className="stream-avatar bg-purple">SJ</div>
+              <div className="stream-info">
+                <p><strong>Sarah Jenkins</strong> reached <strong>Level 18</strong></p>
+                <span className="stream-time"><Clock size={12} /> 2 mins ago</span>
+              </div>
             </div>
-          </div>
-          <div className="activity-item">
-            <div className="activity-avatar bg-green-avatar">PS</div>
-            <div className="activity-content">
-              <p><strong>Priya Sharma</strong> completed <strong>Leadership Fundamentals</strong></p>
-              <span className="activity-time">1 hour ago</span>
+
+            <div className="stream-item">
+              <div className="stream-avatar bg-gold">AP</div>
+              <div className="stream-info">
+                <p><strong>Arjun Patel</strong> unlocked <strong>Course Crusher</strong> badge</p>
+                <span className="stream-time"><Clock size={12} /> 14 mins ago</span>
+              </div>
+            </div>
+
+            <div className="stream-item">
+              <div className="stream-avatar bg-mint">PS</div>
+              <div className="stream-info">
+                <p><strong>Priya Sharma</strong> completed <strong>Leadership Fundamentals</strong></p>
+                <span className="stream-time"><Clock size={12} /> 45 mins ago</span>
+              </div>
+            </div>
+
+            <div className="stream-item">
+              <div className="stream-avatar bg-blue">AT</div>
+              <div className="stream-info">
+                <p><strong>Alex Thorne</strong> maintained a <strong>7-Day Streak</strong> 🔥</p>
+                <span className="stream-time"><Clock size={12} /> 1 hour ago</span>
+              </div>
             </div>
           </div>
         </div>
