@@ -9,7 +9,11 @@ import Profile from './pages/Profile';
 import Challenges from './pages/Challenges';
 import Certificates from './pages/Certificates';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminReports from './pages/AdminReports';
+import AdminCourses from './pages/AdminCourses';
 import AdminFeedback from './pages/AdminFeedback';
+import AdminChallenges from './pages/AdminChallenges';
+import AdminEmployees from './pages/AdminEmployees';
 import CourseView from './pages/CourseView';
 import Login from './pages/Login';
 
@@ -49,8 +53,11 @@ const AppRoutes = () => {
       {/* HR Routes */}
       <Route path="/admin" element={<ProtectedRoute requireRole="hr"><Layout /></ProtectedRoute>}>
         <Route index element={<AdminDashboard />} />
+        <Route path="analytics" element={<AdminReports />} />
+        <Route path="courses" element={<AdminCourses />} />
         <Route path="feedback" element={<AdminFeedback />} />
-        <Route path="employees" element={<div className="p-6">Employees (WIP)</div>} />
+        <Route path="challenges" element={<AdminChallenges />} />
+        <Route path="employees" element={<AdminEmployees />} />
       </Route>
       
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,33 +1,44 @@
-import { Link } from 'react-router-dom';
-import { 
-  Users, 
-  BookOpen, 
-  Trophy, 
-  Target, 
-  TrendingUp, 
-  ArrowUpRight, 
-  FileSpreadsheet, 
-  Plus, 
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  Users,
+  BookOpen,
+  Trophy,
+  Target,
+  TrendingUp,
+  ArrowUpRight,
+  FileSpreadsheet,
+  Plus,
   Sparkles,
   Clock,
   MessageSquare,
-  Star
+  Star,
+  AlertTriangle,
+  Layers
 } from 'lucide-react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  LineChart, 
-  Line 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line
 } from 'recharts';
 import { getAllFeedback } from '../utils/feedbackStorage';
+import {
+  skillDistributionData,
+  skillGapsData,
+  departmentAnalytics,
+  downloadCsv
+} from '../data/adminMockData';
 import './AdminDashboard.css';
+import './AdminPages.css';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+
   const engagementData = [
     { name: 'Mon', value: 420 },
     { name: 'Tue', value: 380 },
@@ -56,6 +67,28 @@ const AdminDashboard = () => {
 
   const recentFeedback = getAllFeedback().slice(0, 3);
 
+  const handleExportAnalyticsCsv = () => {
+    downloadCsv(
+      'skillforge-hr-analytics.csv',
+      ['Department', 'Headcount', 'Active Learners', 'Completion %', 'Avg Score %', 'Compliance %', 'Top Skill Gap'],
+      departmentAnalytics.map((d) => [
+        d.department,
+        d.headcount,
+        d.activeLearners,
+        d.avgCompletion,
+        d.avgScore,
+        d.complianceRate,
+        d.topSkillGap,
+      ])
+    );
+  };
+
+  const getPriorityClass = (priority) => {
+    if (priority === 'Critical') return 'tag-coral';
+    if (priority === 'High') return 'tag-gold';
+    return 'tag-blue';
+  };
+
   return (
     <div className="admin-portal animate-slide-up">
       {/* Header */}
@@ -65,14 +98,14 @@ const AdminDashboard = () => {
             <Trophy size={14} className="text-purple" /> WORKFORCE ANALYTICS & HR INTELLIGENCE
           </div>
           <h1 className="admin-main-title">HR Management Portal</h1>
-          <p className="admin-sub">Monitor organization-wide curriculum health, gamified training velocity, and compliance.</p>
+          <p className="admin-sub">Monitor organization-wide curriculum health, skill distribution, department analytics, and skill gaps.</p>
         </div>
 
         <div className="admin-header-actions">
-          <button className="btn btn-secondary">
+          <button className="btn btn-secondary" onClick={handleExportAnalyticsCsv}>
             <FileSpreadsheet size={16} /> Export CSV
           </button>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => navigate('/admin/courses?create=1')}>
             <Plus size={16} /> Create Course
           </button>
         </div>
@@ -163,10 +196,10 @@ const AdminDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#F0E5D8" vertical={false} />
                 <XAxis dataKey="name" stroke="#6B6183" tick={{ fontSize: 12, fontWeight: 700 }} />
                 <YAxis stroke="#6B6183" tick={{ fontSize: 12, fontWeight: 700 }} />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#FFFFFF', 
-                    borderColor: '#EFE4D6', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderColor: '#EFE4D6',
                     borderRadius: '12px',
                     boxShadow: '0 8px 24px rgba(44, 33, 66, 0.1)',
                     fontFamily: 'var(--font-sans)',
@@ -174,13 +207,13 @@ const AdminDashboard = () => {
                   }}
                   itemStyle={{ color: '#7656E8' }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="#7656E8" 
-                  strokeWidth={4} 
-                  dot={{ r: 5, fill: '#7656E8', stroke: '#FFFFFF', strokeWidth: 2 }} 
-                  activeDot={{ r: 8, fill: '#FFC857' }} 
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#7656E8"
+                  strokeWidth={4}
+                  dot={{ r: 5, fill: '#7656E8', stroke: '#FFFFFF', strokeWidth: 2 }}
+                  activeDot={{ r: 8, fill: '#FFC857' }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -206,19 +239,92 @@ const AdminDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#F0E5D8" vertical={false} />
                 <XAxis dataKey="name" stroke="#6B6183" tick={{ fontSize: 11, fontWeight: 700 }} />
                 <YAxis stroke="#6B6183" tick={{ fontSize: 12, fontWeight: 700 }} />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#FFFFFF', 
-                    borderColor: '#EFE4D6', 
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderColor: '#EFE4D6',
                     borderRadius: '12px',
                     boxShadow: '0 8px 24px rgba(44, 33, 66, 0.1)',
                     fontFamily: 'var(--font-sans)'
-                  }} 
+                  }}
                 />
                 <Bar dataKey="completed" stackId="a" fill="#50C9A7" radius={[0, 0, 4, 4]} />
                 <Bar dataKey="pending" stackId="a" fill="#63B8F5" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* SKILL DISTRIBUTION & SKILL GAPS */}
+      <div className="admin-charts-grid">
+        <div className="chart-wrapper-card card">
+          <div className="section-header">
+            <div>
+              <h2><Layers size={19} className="text-purple" /> Workforce Skill Distribution</h2>
+              <p className="chart-sub">Current organization proficiency vs role benchmark (%)</p>
+            </div>
+            <span className="tag tag-blue">6 Core Competencies</span>
+          </div>
+
+          <div className="chart-canvas-box">
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={skillDistributionData} layout="vertical" margin={{ left: 16 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#F0E5D8" horizontal={false} />
+                <XAxis type="number" domain={[0, 100]} stroke="#6B6183" tick={{ fontSize: 12, fontWeight: 700 }} />
+                <YAxis dataKey="skill" type="category" width={112} stroke="#6B6183" tick={{ fontSize: 11, fontWeight: 700 }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderColor: '#EFE4D6',
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 24px rgba(44, 33, 66, 0.1)',
+                    fontFamily: 'var(--font-sans)'
+                  }}
+                />
+                <Bar dataKey="orgAvg" name="Org Average %" fill="#7656E8" radius={[0, 6, 6, 0]} barSize={14} />
+                <Bar dataKey="target" name="Target Benchmark %" fill="#FFC857" radius={[0, 6, 6, 0]} barSize={10} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="chart-wrapper-card card">
+          <div className="section-header">
+            <div>
+              <h2><AlertTriangle size={19} className="text-coral" /> Organizational Skill Gaps</h2>
+              <p className="chart-sub">Priority capability gaps requiring targeted upskilling</p>
+            </div>
+            <Link to="/admin/courses" className="btn-text">
+              Assign Training <ArrowUpRight size={16} />
+            </Link>
+          </div>
+
+          <div className="skill-gap-list">
+            {skillGapsData.map((item) => (
+              <div key={item.id} className="skill-gap-item">
+                <div className="skill-gap-top">
+                  <span className="skill-gap-title">{item.skill}</span>
+                  <span className={`tag ${getPriorityClass(item.priority)}`}>
+                    {item.priority} • -{item.gap}% gap
+                  </span>
+                </div>
+                <div className="progress-bar-bg small">
+                  <div
+                    className={`progress-bar-fill ${item.priority === 'Critical' ? 'bg-coral' : item.priority === 'High' ? 'bg-gold' : 'bg-green'}`}
+                    style={{ width: `${item.currentAvg}%` }}
+                  />
+                </div>
+                <div className="skill-gap-meta">
+                  <span>
+                    Current: <strong>{item.currentAvg}%</strong> / Target: <strong>{item.targetAvg}%</strong>
+                  </span>
+                  <span>
+                    {item.affectedDepartments.join(', ')} ({item.affectedLearners} learners)
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -232,7 +338,9 @@ const AdminDashboard = () => {
               <h2>Learner Roster & Status</h2>
               <p className="chart-sub">Recent employee progress and compliance validation</p>
             </div>
-            <button className="btn-text">View All Directory <ArrowUpRight size={16} /></button>
+            <Link to="/admin/employees" className="btn-text">
+              View All Directory <ArrowUpRight size={16} />
+            </Link>
           </div>
 
           <div className="admin-roster-table">
@@ -248,7 +356,7 @@ const AdminDashboard = () => {
               {recentEmployees.map((emp, i) => (
                 <div key={i} className="roster-row">
                   <div className="r-cell r-name">
-                    <div className="emp-avatar-circle">{emp.name.split(' ').map(n=>n[0]).join('')}</div>
+                    <div className="emp-avatar-circle">{emp.name.split(' ').map(n => n[0]).join('')}</div>
                     <div>
                       <span className="emp-name-text">{emp.name}</span>
                       <span className="emp-role-sub">{emp.role}</span>
@@ -333,13 +441,13 @@ const AdminDashboard = () => {
         </div>
         <div className="activity-list" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '1rem' }}>
           {recentFeedback.map((f) => (
-            <div 
-              key={f.id} 
-              className="activity-item" 
+            <div
+              key={f.id}
+              className="activity-item"
               style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#FFFDF9', border: '1.5px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}
             >
-              <div 
-                className="activity-avatar" 
+              <div
+                className="activity-avatar"
                 style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}
               >
                 {f.userName.split(' ').map(n => n[0]).join('')}
